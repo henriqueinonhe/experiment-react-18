@@ -7,47 +7,105 @@ import {
   useState,
   useTransition,
 } from "react";
-import { SuspenseProvider } from "./SuspenseProvider";
-import { Slow } from "./Slow";
+import { isClient, isServer } from "./utils";
+import {
+  firstDelayOnServer,
+  secondDelayOnServer,
+  thirdDelayOnServer,
+  fourthDelayOnServer,
+} from "../server/delays";
+import { Spinner } from "./Spinner";
 
-const Lazy = lazy(
-  () =>
-    new Promise((resolve) => setTimeout(() => resolve(import("./Lazy")), 1000))
-);
+const First = lazy(async () => {
+  if (isServer) {
+    await new Promise((resolve) => setTimeout(resolve, firstDelayOnServer));
+  }
+
+  return import("./First");
+});
+
+const Second = lazy(async () => {
+  if (isServer) {
+    await new Promise((resolve) => setTimeout(resolve, secondDelayOnServer));
+  }
+
+  return import("./Second");
+});
+
+const Third = lazy(async () => {
+  if (isServer) {
+    await new Promise((resolve) => setTimeout(resolve, thirdDelayOnServer));
+  }
+
+  return import("./Third");
+});
+
+const Fourth = lazy(async () => {
+  if (isServer) {
+    await new Promise((resolve) => setTimeout(resolve, fourthDelayOnServer));
+  }
+
+  return import("./Fourth");
+});
+
+if (isClient) {
+  import("./First");
+  import("./Second");
+  import("./Third");
+  import("./Fourth");
+}
 
 const App = () => {
-  const [counter, setCounter] = useState(0);
-
   return (
     <html>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>React 18</title>
+
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+          }`,
+          }}
+        />
       </head>
+
       <body>
-        <p>Counter: {counter}</p>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            maxWidth: "800px",
+            justifyContent: "center",
+            margin: "auto",
+          }}
+        >
+          <Suspense fallback={<Spinner />}>
+            <First />
+          </Suspense>
 
-        <div>
-          <button onClick={() => setCounter(counter + 1)}>Increment</button>
+          <Suspense fallback={<Spinner />}>
+            <Second />
+          </Suspense>
+
+          <Suspense fallback={<Spinner />}>
+            <Third />
+          </Suspense>
+
+          <Suspense fallback={<Spinner />}>
+            <Fourth />
+          </Suspense>
         </div>
-
-        {/* <Suspense fallback={<div>Data Loading...</div>}>
-          <Slow />
-        </Suspense> */}
-
-        <Suspense fallback={<div>Lazy Loading...</div>}>
-          <Lazy />
-        </Suspense>
       </body>
     </html>
   );
 };
 
-const AppWithProviders = () => (
-  <SuspenseProvider>
-    <App />
-  </SuspenseProvider>
-);
+const AppWithProviders = () => <App />;
 
 export { AppWithProviders as App };

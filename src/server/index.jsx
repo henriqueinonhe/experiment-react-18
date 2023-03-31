@@ -2,19 +2,46 @@ import express from "express";
 import { renderToPipeableStream } from "react-dom/server";
 import { App } from "../client/App";
 import { resolve } from "path";
+import {
+  firstDelayOnClient,
+  secondDelayOnClient,
+  thirdDelayOnClient,
+  fourthDelayOnClient,
+  initialBundleDelay,
+} from "./delays";
 
 const app = express();
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// app.get("/*.js", async (req, res) => {
-//   await wait(1000);
-//   res.sendFile(resolve(__dirname, `../../dist/${req.path}`));
-// });
+app.get("/client/index.js", async (req, res) => {
+  await wait(initialBundleDelay);
+  res.sendFile(resolve(__dirname, "../../dist/client/index.js"));
+});
 
-// app.get("/dist/client/src_client_lazy_jsx.js", (req, res) => {
-//   res.sendFile("dist/client/src_client_lazy_jsx.js", { root: __dirname });
-// });
+app.get("/client/src_client_First_jsx.js", async (req, res) => {
+  await wait(firstDelayOnClient);
+  res.sendFile(resolve(__dirname, "../../dist/client/src_client_First_jsx.js"));
+});
+
+app.get("/client/src_client_Second_jsx.js", async (req, res) => {
+  await wait(secondDelayOnClient);
+  res.sendFile(
+    resolve(__dirname, "../../dist/client/src_client_Second_jsx.js")
+  );
+});
+
+app.get("/client/src_client_Third_jsx.js", async (req, res) => {
+  await wait(thirdDelayOnClient);
+  res.sendFile(resolve(__dirname, "../../dist/client/src_client_Third_jsx.js"));
+});
+
+app.get("/client/src_client_Fourth_jsx.js", async (req, res) => {
+  await wait(fourthDelayOnClient);
+  res.sendFile(
+    resolve(__dirname, "../../dist/client/src_client_Fourth_jsx.js")
+  );
+});
 
 app.use(express.static("dist"));
 
@@ -31,3 +58,5 @@ app.get("/", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server up!");
 });
+
+// aAIOPSd uioASUd iAS diUASId AIOSd uiAS UdioASid iAPSd ipA UdioA IOduioASd A
