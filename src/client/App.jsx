@@ -10,13 +10,13 @@ import {
 import { SuspenseProvider } from "./SuspenseProvider";
 import { Slow } from "./Slow";
 
+const Lazy = lazy(
+  () =>
+    new Promise((resolve) => setTimeout(() => resolve(import("./Lazy")), 1000))
+);
+
 const App = () => {
   const [counter, setCounter] = useState(0);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    console.log("App Effect!");
-  });
 
   return (
     <html>
@@ -29,24 +29,20 @@ const App = () => {
         <p>Counter: {counter}</p>
 
         <div>
-          <button
-            onClick={() => startTransition(() => setCounter(counter + 1))}
-          >
-            Increment
-          </button>
+          <button onClick={() => setCounter(counter + 1)}>Increment</button>
         </div>
 
-        <Wrapped counter={counter} />
+        {/* <Suspense fallback={<div>Data Loading...</div>}>
+          <Slow />
+        </Suspense> */}
+
+        <Suspense fallback={<div>Lazy Loading...</div>}>
+          <Lazy />
+        </Suspense>
       </body>
     </html>
   );
 };
-
-const Wrapped = memo(({ counter }) => (
-  <Suspense fallback="Loading...">
-    <Slow />
-  </Suspense>
-));
 
 const AppWithProviders = () => (
   <SuspenseProvider>

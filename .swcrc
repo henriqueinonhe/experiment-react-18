@@ -4,7 +4,7 @@
     "parser": {
       "syntax": "ecmascript",
       "jsx": true,
-      "dynamicImport": true,
+      "dynamicImport": false,
       "privateMethod": false,
       "functionBind": false,
       "exportDefaultFrom": false,
@@ -27,9 +27,10 @@
   "module": {
     "type": "commonjs",
     "strict": false,
-    "strictMode": false,
+    "strictMode": true,
     "lazy": false,
-    "noInterop": false
+    "noInterop": false,
+    "ignoreDynamic": true
   },
-  "minify": true
+  "minify": false
 }

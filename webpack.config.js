@@ -1,9 +1,6 @@
 const path = require("path");
 
 const sharedConfig = {
-  output: {
-    path: path.resolve(__dirname, "dist"),
-  },
   module: {
     rules: [
       {
@@ -25,7 +22,11 @@ const sharedConfig = {
 const clientConfig = {
   ...sharedConfig,
   entry: {
-    client: "./src/client/index.jsx",
+    index: "./src/client/index.jsx",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist/client"),
+    clean: true,
   },
   target: "web",
 };
@@ -33,7 +34,11 @@ const clientConfig = {
 const serverConfig = {
   ...sharedConfig,
   entry: {
-    server: "./src/server/index.jsx",
+    index: "./src/server/index.jsx",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist/server"),
+    clean: true,
   },
   target: "node",
 };

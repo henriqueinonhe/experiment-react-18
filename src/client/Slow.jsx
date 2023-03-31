@@ -1,7 +1,7 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useSuspenseData } from "./SuspenseProvider";
 
-export const Slow = memo(() => {
+export const Slow = () => {
   const { dataRef } = useSuspenseData();
   console.log("Slow Rendered!");
 
@@ -20,6 +20,6 @@ export const Slow = memo(() => {
   }
 
   return <>Slow</>;
-});
+};
 
 export default Slow;
