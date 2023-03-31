@@ -1,8 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { DelayHydration, isClient } from "./utils";
 
-export const Base = () => {
+export const Base = ({ id, hydrationDelay }) => {
   const [state, setState] = useState("Html");
   const [clicking, setClicking] = useState(false);
+
+  if (isClient && state !== "Ready") {
+    const element = document.querySelector(`#${id}`);
+    element.style.border = "3px solid #4CFFCC";
+    element.textContent = "Hydrating";
+  }
 
   useEffect(() => {
     setState("Ready");
@@ -27,12 +34,18 @@ export const Base = () => {
   };
 
   return (
-    <div
-      style={style}
-      onMouseDown={() => setClicking(true)}
-      onMouseUp={() => setClicking(false)}
-    >
-      {state}
-    </div>
+    <>
+      <div
+        id={id}
+        style={style}
+        onMouseDown={() => setClicking(true)}
+        onMouseUp={() => setClicking(false)}
+        suppressHydrationWarning
+      >
+        {state}
+      </div>
+
+      {hydrationDelay && <DelayHydration ms={hydrationDelay} />}
+    </>
   );
 };

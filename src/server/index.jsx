@@ -3,10 +3,10 @@ import { renderToPipeableStream } from "react-dom/server";
 import { App } from "../client/App";
 import { resolve } from "path";
 import {
-  firstDelayOnClient,
-  secondDelayOnClient,
-  thirdDelayOnClient,
-  fourthDelayOnClient,
+  firstBundleDelay,
+  secondBundleDelay,
+  thirdBundleDelay,
+  fourthBundleDelay,
   initialBundleDelay,
 } from "./delays";
 
@@ -20,24 +20,24 @@ app.get("/client/index.js", async (req, res) => {
 });
 
 app.get("/client/src_client_First_jsx.js", async (req, res) => {
-  await wait(firstDelayOnClient);
+  await wait(firstBundleDelay);
   res.sendFile(resolve(__dirname, "../../dist/client/src_client_First_jsx.js"));
 });
 
 app.get("/client/src_client_Second_jsx.js", async (req, res) => {
-  await wait(secondDelayOnClient);
+  await wait(secondBundleDelay);
   res.sendFile(
     resolve(__dirname, "../../dist/client/src_client_Second_jsx.js")
   );
 });
 
 app.get("/client/src_client_Third_jsx.js", async (req, res) => {
-  await wait(thirdDelayOnClient);
+  await wait(thirdBundleDelay);
   res.sendFile(resolve(__dirname, "../../dist/client/src_client_Third_jsx.js"));
 });
 
 app.get("/client/src_client_Fourth_jsx.js", async (req, res) => {
-  await wait(fourthDelayOnClient);
+  await wait(fourthBundleDelay);
   res.sendFile(
     resolve(__dirname, "../../dist/client/src_client_Fourth_jsx.js")
   );
@@ -59,4 +59,4 @@ app.listen(3000, () => {
   console.log("Server up!");
 });
 
-// aAIOPSd uioASUd iAS diUASId AIOSd uiAS UdioASid iAPSd ipA UdioA IOduioASd A
+// aAIOPSd uioASUd iAS diUASId AIOSd uiAS UdioASid iAPSd ipA UdioA IOdui

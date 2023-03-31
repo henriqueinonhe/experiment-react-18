@@ -9,16 +9,20 @@ import {
 } from "react";
 import { isClient, isServer } from "./utils";
 import {
-  firstDelayOnServer,
-  secondDelayOnServer,
-  thirdDelayOnServer,
-  fourthDelayOnServer,
+  firstStreamingDelay,
+  secondStreamingDelay,
+  thirdStreamingDelay,
+  fourthStreamingDelay,
+  firstHydrationDelay,
+  secondHydrationDelay,
+  thirdHydrationDelay,
+  fourthHydrationDelay,
 } from "../server/delays";
 import { Spinner } from "./Spinner";
 
 const First = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, firstDelayOnServer));
+    await new Promise((resolve) => setTimeout(resolve, firstStreamingDelay));
   }
 
   return import("./First");
@@ -26,7 +30,7 @@ const First = lazy(async () => {
 
 const Second = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, secondDelayOnServer));
+    await new Promise((resolve) => setTimeout(resolve, secondStreamingDelay));
   }
 
   return import("./Second");
@@ -34,7 +38,7 @@ const Second = lazy(async () => {
 
 const Third = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, thirdDelayOnServer));
+    await new Promise((resolve) => setTimeout(resolve, thirdStreamingDelay));
   }
 
   return import("./Third");
@@ -42,7 +46,7 @@ const Third = lazy(async () => {
 
 const Fourth = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, fourthDelayOnServer));
+    await new Promise((resolve) => setTimeout(resolve, fourthStreamingDelay));
   }
 
   return import("./Fourth");
@@ -86,19 +90,19 @@ const App = () => {
           }}
         >
           <Suspense fallback={<Spinner />}>
-            <First />
+            <First id="First" hydrationDelay={firstHydrationDelay} />
           </Suspense>
 
           <Suspense fallback={<Spinner />}>
-            <Second />
+            <Second id="Second" hydrationDelay={secondHydrationDelay} />
           </Suspense>
 
           <Suspense fallback={<Spinner />}>
-            <Third />
+            <Third id="Third" hydrationDelay={thirdHydrationDelay} />
           </Suspense>
 
           <Suspense fallback={<Spinner />}>
-            <Fourth />
+            <Fourth id="Fourth" hydrationDelay={fourthHydrationDelay} />
           </Suspense>
         </div>
       </body>

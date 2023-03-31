@@ -1,5 +1,5 @@
 import { Base } from "./Base";
 
-const Fourth = () => <Base />;
+const Fourth = (props) => <Base {...props} />;
 
 export default Fourth;

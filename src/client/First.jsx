@@ -1,5 +1,5 @@
 import { Base } from "./Base";
 
-const First = () => <Base />;
+const First = (props) => <Base {...props} />;
 
 export default First;
