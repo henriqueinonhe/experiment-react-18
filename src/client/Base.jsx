@@ -7,6 +7,9 @@ export const Base = ({ id, hydrationDelay }) => {
 
   if (isClient && state !== "Ready") {
     const element = document.querySelector(`#${id}`);
+
+    if (!element) return;
+
     element.style.border = "3px solid #4CFFCC";
     element.textContent = "Hydrating";
   }
@@ -45,7 +48,7 @@ export const Base = ({ id, hydrationDelay }) => {
         {state}
       </div>
 
-      {hydrationDelay && <DelayHydration ms={hydrationDelay} />}
+      {hydrationDelay !== undefined && <DelayHydration ms={hydrationDelay} />}
     </>
   );
 };

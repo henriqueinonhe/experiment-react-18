@@ -58,5 +58,3 @@ app.get("/", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server up!");
 });
-
-// aAIOPSd uioASUd iAS diUASId AIOSd uiAS UdioASid iAPSd ipA UdioA IOdui

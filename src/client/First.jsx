@@ -1,5 +1,6 @@
+import { firstHydrationDelay } from "../server/delays";
 import { Base } from "./Base";
 
-const First = (props) => <Base {...props} />;
+const First = () => <Base id="First" hydrationDelay={firstHydrationDelay} />;
 
 export default First;
