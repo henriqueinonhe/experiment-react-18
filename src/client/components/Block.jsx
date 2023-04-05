@@ -1,7 +1,8 @@
-import { useEffect, useId, useState } from "react";
-import { DelayHydration, isClient } from "./utils";
+import { useEffect, useState } from "react";
+import { DelayHydration, isClient } from "../utils";
+import { Base } from "./Base";
 
-export const Base = ({ id, hydrationDelay }) => {
+export const Block = ({ id, streamingDelay, bundleDelay, hydrationDelay }) => {
   const [state, setState] = useState("Html");
   const [clicking, setClicking] = useState(false);
 
@@ -11,7 +12,7 @@ export const Base = ({ id, hydrationDelay }) => {
     if (!element) return;
 
     element.style.border = "3px solid #4CFFCC";
-    element.textContent = "Hydrating";
+    element.children[0].textContent = "Hydrating";
   }
 
   useEffect(() => {
@@ -23,30 +24,20 @@ export const Base = ({ id, hydrationDelay }) => {
     Ready: "3px solid #5281FF",
   };
 
-  const style = {
-    width: "calc(50% - 8px)",
-    height: "300px",
-    margin: "4px",
-    border: borderMatrix[state],
-    backgroundColor: clicking ? "#5281FF" : "#fff",
-    fontSize: "24px",
-    fontFamily: "sans-serif",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
   return (
     <>
-      <div
+      <Base
         id={id}
-        style={style}
+        border={borderMatrix[state]}
+        backgroundColor={clicking ? "#5281FF" : "#fff"}
         onMouseDown={() => setClicking(true)}
         onMouseUp={() => setClicking(false)}
-        suppressHydrationWarning
+        streamingDelay={streamingDelay}
+        bundleDelay={bundleDelay}
+        hydrationDelay={hydrationDelay}
       >
         {state}
-      </div>
+      </Base>
 
       {hydrationDelay !== undefined && <DelayHydration ms={hydrationDelay} />}
     </>

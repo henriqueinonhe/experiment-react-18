@@ -12,19 +12,27 @@ import {
 import { isClient, isServer } from "./utils";
 import {
   firstStreamingDelay,
+  firstBundleDelay,
+  firstHydrationDelay,
   secondStreamingDelay,
+  secondBundleDelay,
+  secondHydrationDelay,
   thirdStreamingDelay,
+  thirdBundleDelay,
+  thirdHydrationDelay,
   fourthStreamingDelay,
+  fourthBundleDelay,
+  fourthHydrationDelay,
 } from "../server/delays";
-import { Spinner } from "./Spinner";
-import { Data } from "./Data";
+import { Data } from "./components/Data";
+import { Spinner } from "./components/Spinner";
 
 const First = lazy(async () => {
   if (isServer) {
     await new Promise((resolve) => setTimeout(resolve, firstStreamingDelay));
   }
 
-  return import("./First");
+  return import("./components/First");
 });
 
 const Second = lazy(async () => {
@@ -32,7 +40,7 @@ const Second = lazy(async () => {
     await new Promise((resolve) => setTimeout(resolve, secondStreamingDelay));
   }
 
-  return import("./Second");
+  return import("./components/Second");
 });
 
 const Third = lazy(async () => {
@@ -40,7 +48,7 @@ const Third = lazy(async () => {
     await new Promise((resolve) => setTimeout(resolve, thirdStreamingDelay));
   }
 
-  return import("./Third");
+  return import("./components/Third");
 });
 
 const Fourth = lazy(async () => {
@@ -48,14 +56,14 @@ const Fourth = lazy(async () => {
     await new Promise((resolve) => setTimeout(resolve, fourthStreamingDelay));
   }
 
-  return import("./Fourth");
+  return import("./components/Fourth");
 });
 
 if (isClient) {
-  import("./First");
-  import("./Second");
-  import("./Third");
-  import("./Fourth");
+  import("./components/First");
+  import("./components/Second");
+  import("./components/Third");
+  import("./components/Fourth");
 }
 
 const App = () => {
@@ -96,53 +104,64 @@ const App = () => {
             margin: "auto",
           }}
         >
-          <button onClick={() => set({})}>Update</button>
-
-          {/* <WrappedFirst state={deferredState} />
-          <WrappedSecond state={deferredState} />
-          <WrappedThird state={deferredState} />
-          <WrappedFourth state={deferredState} /> */}
-
-          <Suspense fallback="Loading">
-            <Data context={ref} />
+          <Suspense
+            fallback={
+              <Spinner
+                streamingDelay={firstStreamingDelay}
+                bundleDelay={firstBundleDelay}
+                hydrationDelay={firstHydrationDelay}
+              />
+            }
+          >
+            <First />
           </Suspense>
+
+          <Suspense
+            fallback={
+              <Spinner
+                streamingDelay={secondStreamingDelay}
+                bundleDelay={secondBundleDelay}
+                hydrationDelay={secondHydrationDelay}
+              />
+            }
+          >
+            <Second />
+          </Suspense>
+
+          <Suspense
+            fallback={
+              <Spinner
+                streamingDelay={thirdStreamingDelay}
+                bundleDelay={thirdBundleDelay}
+                hydrationDelay={thirdHydrationDelay}
+              />
+            }
+          >
+            <Third />
+          </Suspense>
+
+          <Suspense
+            fallback={
+              <Spinner
+                streamingDelay={fourthStreamingDelay}
+                bundleDelay={fourthBundleDelay}
+                hydrationDelay={fourthHydrationDelay}
+              />
+            }
+          >
+            <Fourth />
+          </Suspense>
+
+          {/* <button onClick={() => set({})}>Update</button> */}
+
+          {/* <Suspense fallback="Loading">
+            <Data context={ref} />
+          </Suspense> */}
         </div>
       </body>
     </html>
   );
 };
-
-const WrappedFirst = memo(({ state }) => {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <First />
-    </Suspense>
-  );
-});
-
-const WrappedSecond = memo(({ state }) => {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <Second />
-    </Suspense>
-  );
-});
-
-const WrappedThird = memo(({ state }) => {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <Third />
-    </Suspense>
-  );
-});
-
-const WrappedFourth = memo(({ state }) => {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <Fourth />
-    </Suspense>
-  );
-});
 
 const AppWithProviders = () => <App />;
 
