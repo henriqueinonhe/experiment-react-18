@@ -5,9 +5,7 @@ export const Base = ({
   onMouseDown,
   onMouseUp,
   children,
-  streamingDelay,
-  bundleDelay,
-  hydrationDelay,
+  label,
 }) => {
   const containerStyle = {
     width: "calc(50% - 8px)",
@@ -46,11 +44,7 @@ export const Base = ({
       <div suppressHydrationWarning>{children}</div>
 
       <div style={delaysStyle}>
-        <div>Delays:</div>
-
-        <div>{`Streaming -> ${streamingDelay}`}</div>
-        <div>{`Bundle -> ${bundleDelay}`}</div>
-        <div>{`Hydration -> ${hydrationDelay}`}</div>
+        <p>{label}</p>
       </div>
     </div>
   );

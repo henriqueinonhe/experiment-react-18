@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { DelayHydration, isClient } from "../utils";
 import { Base } from "./Base";
 
-export const Block = ({ id, streamingDelay, bundleDelay, hydrationDelay }) => {
+export const Block = ({
+  id,
+  streamingDelay,
+  bundleDelay,
+  hydrationDelay,
+  label,
+}) => {
   const [state, setState] = useState("Html");
   const [clicking, setClicking] = useState(false);
 
@@ -35,6 +41,7 @@ export const Block = ({ id, streamingDelay, bundleDelay, hydrationDelay }) => {
         streamingDelay={streamingDelay}
         bundleDelay={bundleDelay}
         hydrationDelay={hydrationDelay}
+        label={label}
       >
         {state}
       </Base>

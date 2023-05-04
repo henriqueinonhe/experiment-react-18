@@ -123,6 +123,7 @@ const App = () => {
             <Suspense
               fallback={
                 <Spinner
+                  label="1"
                   streamingDelay={firstStreamingDelay}
                   bundleDelay={firstBundleDelay}
                   hydrationDelay={firstHydrationDelay}
@@ -135,6 +136,7 @@ const App = () => {
             <Suspense
               fallback={
                 <Spinner
+                  label="2"
                   streamingDelay={secondStreamingDelay}
                   bundleDelay={secondBundleDelay}
                   hydrationDelay={secondHydrationDelay}
@@ -147,6 +149,7 @@ const App = () => {
             <Suspense
               fallback={
                 <Spinner
+                  label="3"
                   streamingDelay={thirdStreamingDelay}
                   bundleDelay={thirdBundleDelay}
                   hydrationDelay={thirdHydrationDelay}
@@ -159,6 +162,7 @@ const App = () => {
             <Suspense
               fallback={
                 <Spinner
+                  label="4"
                   streamingDelay={fourthStreamingDelay}
                   bundleDelay={fourthBundleDelay}
                   hydrationDelay={fourthHydrationDelay}
