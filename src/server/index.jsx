@@ -9,6 +9,7 @@ import {
   fourthBundleDelay,
   initialBundleDelay,
 } from "./delays";
+import { streaming } from "./membrane";
 
 const app = express();
 
@@ -43,6 +44,13 @@ app.get("/client/src_client_Fourth_jsx.js", async (req, res) => {
   );
 });
 
+app.get("/stream/:index", (req, res) => {
+  const index = req.params["index"];
+  const resolve = streaming[index];
+  resolve();
+  res.send("Ok");
+});
+
 app.use(express.static("dist"));
 
 app.get("/", async (req, res) => {
@@ -58,3 +66,5 @@ app.get("/", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server up!");
 });
+
+//

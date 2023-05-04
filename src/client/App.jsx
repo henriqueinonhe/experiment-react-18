@@ -26,10 +26,14 @@ import {
 } from "../server/delays";
 import { Data } from "./components/Data";
 import { Spinner } from "./components/Spinner";
+import { RemoteControl } from "./components/RemoteControl";
+import { streaming } from "../server/membrane";
 
 const First = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, firstStreamingDelay));
+    await new Promise((resolve) => {
+      streaming.first = resolve;
+    });
   }
 
   return import("./components/First");
@@ -37,7 +41,9 @@ const First = lazy(async () => {
 
 const Second = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, secondStreamingDelay));
+    await new Promise((resolve) => {
+      streaming.second = resolve;
+    });
   }
 
   return import("./components/Second");
@@ -45,7 +51,9 @@ const Second = lazy(async () => {
 
 const Third = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, thirdStreamingDelay));
+    await new Promise((resolve) => {
+      streaming.third = resolve;
+    });
   }
 
   return import("./components/Third");
@@ -53,7 +61,9 @@ const Third = lazy(async () => {
 
 const Fourth = lazy(async () => {
   if (isServer) {
-    await new Promise((resolve) => setTimeout(resolve, fourthStreamingDelay));
+    await new Promise((resolve) => {
+      streaming.fourth = resolve;
+    });
   }
 
   return import("./components/Fourth");
@@ -98,65 +108,85 @@ const App = () => {
         <div
           style={{
             display: "flex",
-            flexWrap: "wrap",
-            maxWidth: "800px",
-            justifyContent: "center",
-            margin: "auto",
+            justifyContent: "space-between",
           }}
         >
-          <Suspense
-            fallback={
-              <Spinner
-                streamingDelay={firstStreamingDelay}
-                bundleDelay={firstBundleDelay}
-                hydrationDelay={firstHydrationDelay}
-              />
-            }
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              maxWidth: "800px",
+              justifyContent: "center",
+              margin: "auto",
+            }}
           >
-            <First />
-          </Suspense>
+            <Suspense
+              fallback={
+                <Spinner
+                  streamingDelay={firstStreamingDelay}
+                  bundleDelay={firstBundleDelay}
+                  hydrationDelay={firstHydrationDelay}
+                />
+              }
+            >
+              <First />
+            </Suspense>
 
-          <Suspense
-            fallback={
-              <Spinner
-                streamingDelay={secondStreamingDelay}
-                bundleDelay={secondBundleDelay}
-                hydrationDelay={secondHydrationDelay}
-              />
-            }
-          >
-            <Second />
-          </Suspense>
+            <Suspense
+              fallback={
+                <Spinner
+                  streamingDelay={secondStreamingDelay}
+                  bundleDelay={secondBundleDelay}
+                  hydrationDelay={secondHydrationDelay}
+                />
+              }
+            >
+              <Second />
+            </Suspense>
 
-          <Suspense
-            fallback={
-              <Spinner
-                streamingDelay={thirdStreamingDelay}
-                bundleDelay={thirdBundleDelay}
-                hydrationDelay={thirdHydrationDelay}
-              />
-            }
-          >
-            <Third />
-          </Suspense>
+            <Suspense
+              fallback={
+                <Spinner
+                  streamingDelay={thirdStreamingDelay}
+                  bundleDelay={thirdBundleDelay}
+                  hydrationDelay={thirdHydrationDelay}
+                />
+              }
+            >
+              <Third />
+            </Suspense>
 
-          <Suspense
-            fallback={
-              <Spinner
-                streamingDelay={fourthStreamingDelay}
-                bundleDelay={fourthBundleDelay}
-                hydrationDelay={fourthHydrationDelay}
-              />
-            }
-          >
-            <Fourth />
-          </Suspense>
+            <Suspense
+              fallback={
+                <Spinner
+                  streamingDelay={fourthStreamingDelay}
+                  bundleDelay={fourthBundleDelay}
+                  hydrationDelay={fourthHydrationDelay}
+                />
+              }
+            >
+              <Fourth />
+            </Suspense>
 
-          {/* <button onClick={() => set({})}>Update</button> */}
+            {/* <button onClick={() => set({})}>Update</button> */}
 
-          {/* <Suspense fallback="Loading">
+            {/* <Suspense fallback="Loading">
             <Data context={ref} />
           </Suspense> */}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItms: "center",
+            }}
+          >
+            <RemoteControl target="first" label={"First"} />
+            <RemoteControl target="second" label={"Second"} />
+            <RemoteControl target="third" label={"Third"} />
+            <RemoteControl target="fourth" label={"Fourth"} />
+          </div>
         </div>
       </body>
     </html>

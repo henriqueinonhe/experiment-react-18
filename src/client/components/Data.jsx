@@ -9,7 +9,6 @@ export const Data = ({ context }) => {
     data.promise = new Promise((resolve) => {
       setTimeout(() => {
         data.isFinished = true;
-        console.log("Here");
         resolve();
       }, 1500);
     });
