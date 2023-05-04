@@ -118,6 +118,7 @@ const App = () => {
               maxWidth: "800px",
               justifyContent: "center",
               margin: "auto",
+              flexGrow: 1,
             }}
           >
             <Suspense
@@ -179,18 +180,7 @@ const App = () => {
           </Suspense> */}
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItms: "center",
-            }}
-          >
-            <RemoteControl target="first" label={"First"} />
-            <RemoteControl target="second" label={"Second"} />
-            <RemoteControl target="third" label={"Third"} />
-            <RemoteControl target="fourth" label={"Fourth"} />
-          </div>
+          <iframe src="http://a.localhost:3000/iframe" />
         </div>
       </body>
     </html>

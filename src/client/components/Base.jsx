@@ -20,15 +20,16 @@ export const Base = ({
     alignItems: "center",
     userSelect: "none",
     position: "relative",
+    flexGrow: 1,
   };
 
-  const delaysStyle = {
+  const labelStyle = {
     position: "absolute",
     top: "0",
     left: "0",
     display: "flex",
     flexDirection: "column",
-    fontSize: "14px",
+    fontSize: "28px",
     paddingLeft: "4px",
     paddingTop: "4px",
   };
@@ -43,9 +44,7 @@ export const Base = ({
     >
       <div suppressHydrationWarning>{children}</div>
 
-      <div style={delaysStyle}>
-        <p>{label}</p>
-      </div>
+      <p style={labelStyle}>{label}</p>
     </div>
   );
 };

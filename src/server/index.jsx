@@ -3,6 +3,7 @@ import { renderToPipeableStream } from "react-dom/server";
 import { App } from "../client/App";
 import { resolve } from "path";
 import { bundle, streaming } from "./membrane";
+import { Iframe } from "../client/Iframe";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.get("/client/index.js", async (req, res) => {
   // await new Promise((resolve) => {
   //   bundle.initial = resolve;
   // });
+  //TODO
   res.sendFile(resolve(__dirname, "../../dist/client/index.js"));
 });
 
@@ -65,14 +67,20 @@ app.get("/bundle/:id", (req, res) => {
   res.send("Ok");
 });
 
-// app.use(express.static("dist"));
-
-app.get("/client/index.js", (req, res) => {
-  res.sendFile(resolve(__dirname, "../../dist/client/index.js"));
-});
+app.use(express.static("dist"));
 
 app.get("/", async (req, res) => {
   const { pipe } = renderToPipeableStream(<App />, {
+    bootstrapScripts: ["./client/index.js"],
+    onShellReady: () => {
+      res.setHeader("content-type", "text/html");
+      pipe(res);
+    },
+  });
+});
+
+app.get("/iframe", (req, res) => {
+  const { pipe } = renderToPipeableStream(<Iframe />, {
     bootstrapScripts: ["./client/index.js"],
     onShellReady: () => {
       res.setHeader("content-type", "text/html");
