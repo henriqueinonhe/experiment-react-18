@@ -4,7 +4,7 @@ export const RemoteControl = ({ label, target }) => {
   };
 
   const sendBundle = () => {
-    //TODO
+    fetch(`http://localhost:3000/bundle/${target}`);
   };
 
   const hydrate = () => {

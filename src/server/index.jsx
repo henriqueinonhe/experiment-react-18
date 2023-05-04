@@ -2,56 +2,74 @@ import express from "express";
 import { renderToPipeableStream } from "react-dom/server";
 import { App } from "../client/App";
 import { resolve } from "path";
-import {
-  firstBundleDelay,
-  secondBundleDelay,
-  thirdBundleDelay,
-  fourthBundleDelay,
-  initialBundleDelay,
-} from "./delays";
-import { streaming } from "./membrane";
+import { bundle, streaming } from "./membrane";
 
 const app = express();
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 app.get("/client/index.js", async (req, res) => {
-  await wait(initialBundleDelay);
+  // await new Promise((resolve) => {
+  //   bundle.initial = resolve;
+  // });
   res.sendFile(resolve(__dirname, "../../dist/client/index.js"));
 });
 
-app.get("/client/src_client_First_jsx.js", async (req, res) => {
-  await wait(firstBundleDelay);
-  res.sendFile(resolve(__dirname, "../../dist/client/src_client_First_jsx.js"));
-});
-
-app.get("/client/src_client_Second_jsx.js", async (req, res) => {
-  await wait(secondBundleDelay);
+app.get("/client/src_client_components_First_jsx.js", async (req, res) => {
+  await new Promise((resolver) => {
+    bundle.first = resolver;
+  });
   res.sendFile(
-    resolve(__dirname, "../../dist/client/src_client_Second_jsx.js")
+    resolve(__dirname, "../../dist/client/src_client_components_First_jsx.js")
   );
 });
 
-app.get("/client/src_client_Third_jsx.js", async (req, res) => {
-  await wait(thirdBundleDelay);
-  res.sendFile(resolve(__dirname, "../../dist/client/src_client_Third_jsx.js"));
-});
-
-app.get("/client/src_client_Fourth_jsx.js", async (req, res) => {
-  await wait(fourthBundleDelay);
+app.get("/client/src_client_components_Second_jsx.js", async (req, res) => {
+  await new Promise((resolver) => {
+    bundle.second = resolver;
+  });
   res.sendFile(
-    resolve(__dirname, "../../dist/client/src_client_Fourth_jsx.js")
+    resolve(__dirname, "../../dist/client/src_client_components_Second_jsx.js")
   );
 });
 
-app.get("/stream/:index", (req, res) => {
-  const index = req.params["index"];
-  const resolve = streaming[index];
+app.get("/client/src_client_components_Third_jsx.js", async (req, res) => {
+  await new Promise((resolver) => {
+    bundle.third = resolver;
+  });
+  res.sendFile(
+    resolve(__dirname, "../../dist/client/src_client_components_Third_jsx.js")
+  );
+});
+
+app.get("/client/src_client_components_Fourth_jsx.js", async (req, res) => {
+  await new Promise((resolver) => {
+    bundle.fourth = resolver;
+  });
+  res.sendFile(
+    resolve(__dirname, "../../dist/client/src_client_components_Fourth_jsx.js")
+  );
+});
+
+app.get("/stream/:id", (req, res) => {
+  const id = req.params["id"];
+  const resolve = streaming[id];
   resolve();
   res.send("Ok");
 });
 
-app.use(express.static("dist"));
+app.get("/bundle/:id", (req, res) => {
+  const id = req.params["id"];
+  const resolve = bundle[id];
+  resolve();
+  res.send("Ok");
+});
+
+// app.use(express.static("dist"));
+
+app.get("/client/index.js", (req, res) => {
+  res.sendFile(resolve(__dirname, "../../dist/client/index.js"));
+});
 
 app.get("/", async (req, res) => {
   const { pipe } = renderToPipeableStream(<App />, {
