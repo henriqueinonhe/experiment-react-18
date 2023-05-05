@@ -1,18 +1,5 @@
-import {
-  thirdBundleDelay,
-  thirdHydrationDelay,
-  thirdStreamingDelay,
-} from "../../server/delays";
 import { Block } from "./Block";
 
-const Third = () => (
-  <Block
-    id="Third"
-    label="3"
-    streamingDelay={thirdStreamingDelay}
-    bundleDelay={thirdBundleDelay}
-    hydrationDelay={thirdHydrationDelay}
-  />
-);
+const Third = () => <Block id="Third" label="3" index={2} />;
 
 export default Third;

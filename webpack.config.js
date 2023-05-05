@@ -23,6 +23,8 @@ const clientConfig = {
   ...sharedConfig,
   entry: {
     index: "./src/client/index.jsx",
+    iframe: "./src/client/iframe.jsx",
+    worker: "./src/client/worker.js",
   },
   output: {
     path: path.resolve(__dirname, "dist/client"),

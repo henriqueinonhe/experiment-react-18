@@ -7,7 +7,10 @@ import { Iframe } from "../client/Iframe";
 
 const app = express();
 
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 app.get("/client/index.js", async (req, res) => {
   // await new Promise((resolve) => {
@@ -67,13 +70,18 @@ app.get("/bundle/:id", (req, res) => {
   res.send("Ok");
 });
 
-app.use(express.static("dist"));
+const setArrayBufferCompatibilityHeaders = (res) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+};
 
 app.get("/", async (req, res) => {
   const { pipe } = renderToPipeableStream(<App />, {
     bootstrapScripts: ["./client/index.js"],
     onShellReady: () => {
       res.setHeader("content-type", "text/html");
+      setArrayBufferCompatibilityHeaders(res);
       pipe(res);
     },
   });
@@ -81,13 +89,50 @@ app.get("/", async (req, res) => {
 
 app.get("/iframe", (req, res) => {
   const { pipe } = renderToPipeableStream(<Iframe />, {
-    bootstrapScripts: ["./client/index.js"],
+    bootstrapScripts: ["./client/iframe.js"],
     onShellReady: () => {
       res.setHeader("content-type", "text/html");
+      setArrayBufferCompatibilityHeaders(res);
       pipe(res);
     },
   });
 });
+
+app.get("/worker.js", (req, res) => {
+  setArrayBufferCompatibilityHeaders(res);
+  res.sendFile(resolve(__dirname, "../../dist/client/worker.js"));
+});
+
+const sseConnections = [];
+
+app.post("/hydrate/:id", (req, res) => {
+  const id = req.params.id;
+
+  sseConnections.forEach((connection) => connection.send(id));
+  res.send("Ok");
+});
+
+app.get("/sse", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  const connection = {
+    send: (id) => res.write(`event: message\ndata: ${id}\n\n`),
+    close: () => res.end(),
+  };
+
+  req.on("close", () => {
+    const index = sseConnections.indexOf(connection);
+    sseConnections.splice(index, 1);
+    connection.close();
+  });
+
+  sseConnections.push(connection);
+});
+
+app.use(express.static("dist"));
 
 app.listen(3000, () => {
   console.log("Server up!");

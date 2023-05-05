@@ -1,32 +1,6 @@
-import {
-  Suspense,
-  lazy,
-  memo,
-  useDeferredValue,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { Suspense, lazy, useDeferredValue, useRef, useState } from "react";
 import { isClient, isServer } from "./utils";
-import {
-  firstStreamingDelay,
-  firstBundleDelay,
-  firstHydrationDelay,
-  secondStreamingDelay,
-  secondBundleDelay,
-  secondHydrationDelay,
-  thirdStreamingDelay,
-  thirdBundleDelay,
-  thirdHydrationDelay,
-  fourthStreamingDelay,
-  fourthBundleDelay,
-  fourthHydrationDelay,
-} from "../server/delays";
-import { Data } from "./components/Data";
 import { Spinner } from "./components/Spinner";
-import { RemoteControl } from "./components/RemoteControl";
 import { streaming } from "../server/membrane";
 
 const First = lazy(async () => {
@@ -121,55 +95,19 @@ const App = () => {
               flexGrow: 1,
             }}
           >
-            <Suspense
-              fallback={
-                <Spinner
-                  label="1"
-                  streamingDelay={firstStreamingDelay}
-                  bundleDelay={firstBundleDelay}
-                  hydrationDelay={firstHydrationDelay}
-                />
-              }
-            >
+            <Suspense fallback={<Spinner label="1" />}>
               <First />
             </Suspense>
 
-            <Suspense
-              fallback={
-                <Spinner
-                  label="2"
-                  streamingDelay={secondStreamingDelay}
-                  bundleDelay={secondBundleDelay}
-                  hydrationDelay={secondHydrationDelay}
-                />
-              }
-            >
+            <Suspense fallback={<Spinner label="2" />}>
               <Second />
             </Suspense>
 
-            <Suspense
-              fallback={
-                <Spinner
-                  label="3"
-                  streamingDelay={thirdStreamingDelay}
-                  bundleDelay={thirdBundleDelay}
-                  hydrationDelay={thirdHydrationDelay}
-                />
-              }
-            >
+            <Suspense fallback={<Spinner label="3" />}>
               <Third />
             </Suspense>
 
-            <Suspense
-              fallback={
-                <Spinner
-                  label="4"
-                  streamingDelay={fourthStreamingDelay}
-                  bundleDelay={fourthBundleDelay}
-                  hydrationDelay={fourthHydrationDelay}
-                />
-              }
-            >
+            <Suspense fallback={<Spinner label="4" />}>
               <Fourth />
             </Suspense>
 

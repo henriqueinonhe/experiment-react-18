@@ -1,5 +1,5 @@
 export const RemoteControl = ({ label, target }) => {
-  const stream = () => {
+  const sendSsrHtml = () => {
     fetch(`http://localhost:3000/stream/${target}`);
   };
 
@@ -8,7 +8,9 @@ export const RemoteControl = ({ label, target }) => {
   };
 
   const hydrate = () => {
-    //TODO
+    fetch(`http://localhost:3000/hydrate/${target}`, {
+      method: "POST",
+    });
   };
 
   return (
@@ -20,7 +22,7 @@ export const RemoteControl = ({ label, target }) => {
     >
       <p>{label}</p>
 
-      <button onClick={stream}>Stream</button>
+      <button onClick={sendSsrHtml}>Send SSR Html</button>
       <button onClick={sendBundle}>Send Bundle</button>
       <button onClick={hydrate}>Hydrate</button>
     </div>

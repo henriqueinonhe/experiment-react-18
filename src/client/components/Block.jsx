@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
-import { DelayHydration, isClient } from "../utils";
+import { isClient, isServer, sleep } from "../utils";
 import { Base } from "./Base";
+import { sharedArray } from "../clientWorker";
 
-export const Block = ({
-  id,
-  streamingDelay,
-  bundleDelay,
-  hydrationDelay,
-  label,
-}) => {
+export const Block = ({ id, index, label }) => {
   const [state, setState] = useState("Html");
   const [clicking, setClicking] = useState(false);
 
@@ -38,15 +33,22 @@ export const Block = ({
         backgroundColor={clicking ? "#5281FF" : "#fff"}
         onMouseDown={() => setClicking(true)}
         onMouseUp={() => setClicking(false)}
-        streamingDelay={streamingDelay}
-        bundleDelay={bundleDelay}
-        hydrationDelay={hydrationDelay}
         label={label}
       >
         {state}
       </Base>
 
-      {hydrationDelay !== undefined && <DelayHydration ms={hydrationDelay} />}
+      <BlockHydration index={index} />
     </>
   );
+};
+
+const BlockHydration = ({ index }) => {
+  if (isServer || sharedArray[index]) {
+    return null;
+  }
+
+  sleep(20);
+
+  return <BlockHydration index={index} />;
 };
