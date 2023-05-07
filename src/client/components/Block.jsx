@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { isClient, isServer, sleep } from "../utils";
+import { isClient, isServer, sleep, useData } from "../utils";
 import { Base } from "./Base";
 import { sharedArray } from "../clientWorker";
 
 export const Block = ({ id, index, label }) => {
   const [state, setState] = useState("Html");
   const [clicking, setClicking] = useState(false);
+
+  useData(id);
 
   if (isClient && state !== "Ready") {
     const element = document.querySelector(`#${id}`);

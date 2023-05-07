@@ -3,61 +3,17 @@ import { isClient, isServer } from "./utils";
 import { Spinner } from "./components/Spinner";
 import { streaming } from "../server/membrane";
 
-const First = lazy(async () => {
-  if (isServer) {
-    await new Promise((resolve) => {
-      streaming.first = resolve;
-    });
-  }
-
-  return import("./components/First");
-});
-
-const Second = lazy(async () => {
-  if (isServer) {
-    await new Promise((resolve) => {
-      streaming.second = resolve;
-    });
-  }
-
-  return import("./components/Second");
-});
-
-const Third = lazy(async () => {
-  if (isServer) {
-    await new Promise((resolve) => {
-      streaming.third = resolve;
-    });
-  }
-
-  return import("./components/Third");
-});
-
-const Fourth = lazy(async () => {
-  if (isServer) {
-    await new Promise((resolve) => {
-      streaming.fourth = resolve;
-    });
-  }
-
-  return import("./components/Fourth");
-});
-
-if (isClient) {
-  import("./components/First");
-  import("./components/Second");
-  import("./components/Third");
-  import("./components/Fourth");
-}
+const First = lazy(async () => import("./components/First"));
+const Second = lazy(async () => import("./components/Second"));
+const Third = lazy(async () => import("./components/Third"));
+const Fourth = lazy(async () => import("./components/Fourth"));
 
 const App = () => {
   const [state, set] = useState();
   const deferredState = useDeferredValue(state);
 
-  const ref = useRef({
-    promise: undefined,
-    isFinished: false,
-  });
+  const uniqueIdRef = useRef(Math.random());
+  const dataRecordsRef = useRef({});
 
   return (
     <html>
